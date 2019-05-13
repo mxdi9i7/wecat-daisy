@@ -6,25 +6,40 @@ const apiUrl = getApiUrl();
 class LandingPage extends Component {
   state = {
     isLoggedIn: false,
-    loginQR: ""
+    loginQR: "",
+    rooms: []
   };
   componentDidMount() {}
   handleLogin = () => {
     axios.get(apiUrl + "/login").then(resp => {
-      console.log(resp.data.data);
-      this.setState({ loginQR: resp.data.data });
+      if (resp.data.data) {
+        this.setState({ loginQR: resp.data.data });
+      }
+    });
+  };
+  handleGetRoomsList = () => {
+    axios.get(apiUrl + "/rooms").then(resp => {
+      this.setState({ rooms: resp.data.data });
     });
   };
   render() {
-    const { loginQR, isLoggedIn } = this.state;
+    const { loginQR, isLoggedIn, rooms } = this.state;
     return (
       <div>
-        <div className="qr-container">
-          <img src={loginQR} alt="qr" />
+        <div className="login-container">
+          <div className="qr-container">
+            <img src={loginQR} alt="qr" />
+          </div>
+          <div className="button-container">
+            <button onClick={this.handleLogin}>Login</button>
+          </div>
         </div>
-        <div className="button-container">
-          <button onClick={this.handleLogin}>Login</button>
+        <div className="rooms-container">
+          {rooms.map(room => (
+            <p>{room}</p>
+          ))}
         </div>
+        <button onClick={this.handleGetRoomsList}>get rooms</button>
       </div>
     );
   }
