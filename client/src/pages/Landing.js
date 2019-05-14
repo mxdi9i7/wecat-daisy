@@ -15,7 +15,7 @@ class LandingPage extends Component {
     this.pollForLoginState();
   }
   handleLogin = () => {
-    axios.get(apiUrl + "/login").then(resp => {
+    axios.get(apiUrl + "/qr").then(resp => {
       if (resp.data.data) {
         this.setState({ loginQR: resp.data.data });
       }

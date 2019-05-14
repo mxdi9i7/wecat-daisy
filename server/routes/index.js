@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 const { Wechaty, Room } = require("wechaty");
 const { onScan } = require("../utils/wechat");
-const bot = new Wechaty({ name: "wecat" });
+const bot = new Wechaty();
 
 let qrImageUrl;
 let isLoggedIn;
@@ -21,7 +21,12 @@ bot
   .then(() => console.log("Bot Started."))
   .catch(e => console.error(e));
 
-/* GET home page. */
+router.get("/qr", (req, res) => {
+  res.json({
+    data: qrImageUrl
+  });
+});
+
 router.get("/login", function(req, res, next) {
   if (isLoggedIn) {
     res.json({
@@ -29,7 +34,7 @@ router.get("/login", function(req, res, next) {
     });
   } else {
     res.json({
-      data: false
+      data: qrImageUrl
     });
   }
 });
