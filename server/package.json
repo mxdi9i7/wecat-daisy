@@ -14,5 +14,11 @@
     "jade": "~1.11.0",
     "morgan": "~1.9.1",
     "wechaty": "^0.26.1"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "*.memory-card.json"
+    ],
+    "delay": "2500"
   }
 }
