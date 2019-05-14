@@ -4,8 +4,8 @@ export const getApiUrl = () => {
     case "development":
       return "http://localhost:3069";
     case "prod":
-      return "http://localhost:3069";
+      return "https://a00cdbe1.ngrok.io/";
     default:
-      break;
+      return "https://a00cdbe1.ngrok.io/";
   }
 };
