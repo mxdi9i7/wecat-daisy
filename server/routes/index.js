@@ -2,7 +2,15 @@ var express = require("express");
 var router = express.Router();
 const { Wechaty, Room } = require("wechaty");
 const { onScan } = require("../utils/wechat");
-const bot = new Wechaty();
+const WECHATY_PUPPET_PADCHAT_TOKEN = "puppet_padchat_6916fdbccc66d07f";
+const puppet = "wechaty-puppet-padchat"; // 使用ipad 的方式接入。
+const puppetOptions = {
+  token: WECHATY_PUPPET_PADCHAT_TOKEN
+};
+const bot = new Wechaty({
+  puppet,
+  puppetOptions
+});
 
 let qrImageUrl;
 let isLoggedIn;
@@ -13,6 +21,11 @@ bot.on("scan", (qr, status) => {
 bot.on("login", () => {
   isLoggedIn = true;
 });
+
+// bot.on("ready", async () => {
+//   const allRooms = await bot.Room.findAll();
+//   console.log(allRooms);
+// });
 // bot.on("logout", onLogout);
 // bot.on("message", onMessage);
 
@@ -34,12 +47,13 @@ router.get("/login", function(req, res, next) {
     });
   } else {
     res.json({
-      data: qrImageUrl
+      data: false
     });
   }
 });
 
 router.get("/rooms", async (req, res) => {
+  await bot.Room.sync();
   const roomList = await bot.Room.findAll();
   const roomListNames = [];
   for (let i = 0; i < roomList.length; i++) {
