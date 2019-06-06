@@ -120,7 +120,7 @@ class LandingPage extends Component {
               <button onClick={this.handleSendMassMessage}>send msg</button>
             </div>
           )
-        }
+        }``
       </div>
     );
   }
