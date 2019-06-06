@@ -20,5 +20,8 @@
       "*.memory-card.json"
     ],
     "delay": "2500"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
   }
 }

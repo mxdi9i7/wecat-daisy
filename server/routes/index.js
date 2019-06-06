@@ -13,7 +13,7 @@ const bot = new Wechaty({
 });
 
 let qrImageUrl;
-let isLoggedIn;
+let isLoggedIn, isRoomReady, roomListNames = [];
 
 bot.on("scan", (qr, status) => {
   qrImageUrl = onScan(qr);
@@ -22,10 +22,17 @@ bot.on("login", () => {
   isLoggedIn = true;
 });
 
-// bot.on("ready", async () => {
-//   const allRooms = await bot.Room.findAll();
-//   console.log(allRooms);
-// });
+bot.on("ready", async () => {
+  console.log('bot ready')
+  const allRooms = await bot.Room.findAll();
+  console.log('room ready')
+  isRoomReady = true
+  for (let i = 0; i < allRooms.length; i++) {
+    const element = await allRooms[i].topic();
+    roomListNames.push(element);
+  }
+});
+
 // bot.on("logout", onLogout);
 // bot.on("message", onMessage);
 
@@ -53,16 +60,10 @@ router.get("/login", function(req, res, next) {
 });
 
 router.get("/rooms", async (req, res) => {
-  await bot.Room.sync();
-  const roomList = await bot.Room.findAll();
-  const roomListNames = [];
-  for (let i = 0; i < roomList.length; i++) {
-    const element = await roomList[i].topic();
-    roomListNames.push(element);
-  }
-
+  console.log(roomListNames)
   res.json({
-    data: roomListNames
+    data: roomListNames,
+    isRoomReady
   });
 });
 
