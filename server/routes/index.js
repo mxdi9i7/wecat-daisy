@@ -70,14 +70,13 @@ router.get("/rooms", async (req, res) => {
 router.get("/rooms/send", async (req, res) => {
   const { msg, timeout } = req.query;
   if (msg && timeout) {
-    const roomList = await bot.Room.findAll();
     var i = 0;
     function myLoop() {
       setTimeout(async function() {
-        if (i < roomList.length) {
-          const roomName = await roomList[i].topic();
+        if (i < roomListNames.length) {
+          const roomName = await roomListNames[i].topic();
           console.log(roomName);
-          await roomList[i].say(msg);
+          await roomListNames[i].say(msg);
 
           i++;
           myLoop();
