@@ -4,8 +4,8 @@ export const getApiUrl = () => {
     case "development":
       return "http://localhost:3069";
     case "prod":
-      return "https://a00cdbe1.ngrok.io";
+      return "https://wecat-daisy.demo.bctc.io";
     default:
-      return "https://a00cdbe1.ngrok.io";
+      return "https://wecat-daisy.demo.bctc.io";
   }
 };
