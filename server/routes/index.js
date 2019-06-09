@@ -13,7 +13,10 @@ const bot = new Wechaty({
 });
 
 let qrImageUrl;
-let isLoggedIn, isRoomReady, roomListNames = [];
+let isLoggedIn,
+  isRoomReady,
+  roomListNames = [];
+roomList = [];
 
 bot.on("scan", (qr, status) => {
   qrImageUrl = onScan(qr);
@@ -23,13 +26,15 @@ bot.on("login", () => {
 });
 
 bot.on("ready", async () => {
-  console.log('bot ready')
+  console.log("bot ready");
   const allRooms = await bot.Room.findAll();
-  console.log('room ready')
-  isRoomReady = true
+  console.log("room ready");
+  isRoomReady = true;
   for (let i = 0; i < allRooms.length; i++) {
-    const element = await allRooms[i].topic();
-    roomListNames.push(element);
+    const room = allRooms[i];
+    const name = await allRooms[i].topic();
+    roomListNames.push(name);
+    roomList.push(room);
   }
 });
 
@@ -60,7 +65,7 @@ router.get("/login", function(req, res, next) {
 });
 
 router.get("/rooms", async (req, res) => {
-  console.log(roomListNames)
+  console.log(roomListNames);
   res.json({
     data: roomListNames,
     isRoomReady
@@ -73,11 +78,8 @@ router.get("/rooms/send", async (req, res) => {
     var i = 0;
     function myLoop() {
       setTimeout(async function() {
-        if (i < roomListNames.length) {
-          const roomName = await roomListNames[i].topic();
-          console.log(roomName);
-          await roomListNames[i].say(msg);
-
+        if (i < roomList.length) {
+          await roomList[i].say(msg);
           i++;
           myLoop();
         } else {
